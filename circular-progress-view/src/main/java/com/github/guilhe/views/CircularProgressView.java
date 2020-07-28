@@ -100,6 +100,7 @@ public class CircularProgressView extends View {
     private int[] mShaderColors;
     private float[] mShaderPositions;
     private boolean mInitShader;
+    private boolean mSizeChanged = false;
 
     public interface OnProgressChangeAnimationCallback {
         void onProgressChanged(float progress);
@@ -224,6 +225,7 @@ public class CircularProgressView extends View {
      */
     public void setSize(int size) {
         getLayoutParams().height = size;
+        mSizeChanged = true;
         requestLayout();
     }
 
@@ -776,6 +778,9 @@ public class CircularProgressView extends View {
         //Progress logic
         if (mInitShader) {
             mInitShader = false;
+            setShader(new SweepGradient(mProgressRectF.centerX(), mProgressRectF.centerY(), mShaderColors, mShaderPositions));
+        } else if (mSizeChanged) {
+            mSizeChanged = false;
             setShader(new SweepGradient(mProgressRectF.centerX(), mProgressRectF.centerY(), mShaderColors, mShaderPositions));
         }
 
